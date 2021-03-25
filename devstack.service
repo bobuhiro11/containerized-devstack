@@ -1,0 +1,13 @@
+[Unit]
+Description=devstack
+
+[Service]
+User=stack
+Type=oneshot
+ExecStart=/opt/stack/devstack/stack.sh
+ExecReload = /usr/bin/kill -HUP $MAINPID
+KillMode = process
+StandardOutput=tty
+
+[Install]
+WantedBy=multi-user.target
