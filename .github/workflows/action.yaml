@@ -1,0 +1,21 @@
+name: action
+on: [push, pull_request]
+jobs:
+  lint:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: hadolint
+        run: docker run --rm -i hadolint/hadolint < Dockerfile
+  test:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Init docker-compose
+        run: |
+          docker-compose up -d
+          sleep 1800
+      - name: Exec OpenStack CLI
+        run: |
+          docker-compose logs -t --tail=100
+          docker-compose exec -T --user stack devstack /bin/bash -c 'source devstack/openrc admin admin; openstack compute service list'
