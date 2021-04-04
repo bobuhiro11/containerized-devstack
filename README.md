@@ -13,19 +13,19 @@ This will take about 30 minutes.
 $ sudo docker-compose up -d
 
 $ sudo docker-compose logs -f
-devstack_1  | This is your host IP address: 172.28.0.2
-devstack_1  | Horizon is now available at http://172.28.0.2/dashboard
-devstack_1  | Keystone is serving at http://172.28.0.2/identity/
-devstack_1  | The default users are: admin and demo
-devstack_1  | The password: nomoresecret
-devstack_1  |
-devstack_1  | Services are running under systemd unit files.
-devstack_1  | For more information see:
-devstack_1  | https://docs.openstack.org/devstack/latest/systemd.html
-devstack_1  |
-devstack_1  | DevStack Version: wallaby
-devstack_1  | Change:
-devstack_1  | OS Version: Ubuntu 20.04 focal
+controller  | This is your host IP address: 172.28.0.2
+controller  | Horizon is now available at http://172.28.0.2/dashboard
+controller  | Keystone is serving at http://172.28.0.2/identity/
+controller  | The default users are: admin and demo
+controller  | The password: nomoresecret
+controller  |
+controller  | Services are running under systemd unit files.
+controller  | For more information see:
+controller  | https://docs.openstack.org/devstack/latest/systemd.html
+controller  |
+controller  | DevStack Version: wallaby
+controller  | Change:
+controller  | OS Version: Ubuntu 20.04 focal
 ```
 
 You can use the OpenStack CLI in the container.
@@ -33,7 +33,7 @@ You can use the OpenStack CLI in the container.
 ```bash
 $ sudo docker-compose exec \
   --user stack \
-  devstack \
+  controller \
   /bin/bash -c 'source devstack/openrc admin admin; exec /bin/bash'
 
 stack@538b06c0fc0b:~$ openstack endpoint list

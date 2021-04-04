@@ -5,8 +5,10 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - name: hadolint
-        run: docker run --rm -i hadolint/hadolint < Dockerfile
+      - name: hadolint for controller
+        run: docker run --rm -i hadolint/hadolint < controller/Dockerfile
+      - name: hadolint for compute
+        run: docker run --rm -i hadolint/hadolint < compute/Dockerfile
   test:
     runs-on: ubuntu-20.04
     steps:
@@ -18,4 +20,4 @@ jobs:
       - name: Exec OpenStack CLI
         run: |
           docker-compose logs -t --tail=100
-          docker-compose exec -T --user stack devstack /bin/bash -c 'source devstack/openrc admin admin; openstack compute service list'
+          docker-compose exec -T --user stack controller /bin/bash -c 'source devstack/openrc admin admin; openstack compute service list'
