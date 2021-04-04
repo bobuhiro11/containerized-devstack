@@ -13,9 +13,12 @@ RUN apt-get update \
     iproute2=5.5.0-1ubuntu1 \
     lsb=11.1.0ubuntu2 \
     git=1:2.25.1-1ubuntu3.1 \
+    curl=7.68.0-1ubuntu2.5 \
     init=1.57 \
   && apt-get -y clean \
   && rm -rf /var/lib/apt/lists/*
+RUN curl https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh > /bin/wait-for-it.sh \
+  && chmod a+x /bin/wait-for-it.sh
 
 RUN useradd -s /bin/bash -d /opt/stack -m stack \
   && mkdir -p /etc/sudoers.d/ \
@@ -26,8 +29,8 @@ RUN git clone https://github.com/openstack/devstack.git \
   && git -C ./devstack checkout $DEVSTACK_COMMIT \
   && chown -R stack:stack ./devstack
 
-COPY local.conf /opt/stack/devstack/
-COPY devstack.service /etc/systemd/system/
+COPY compute/local.conf /opt/stack/devstack/
+COPY compute/devstack.service /etc/systemd/system/
 COPY 0001-devstack-disable-ovs.patch /opt/stack/
 
 RUN patch -d ./devstack -p1 < 0001-devstack-disable-ovs.patch

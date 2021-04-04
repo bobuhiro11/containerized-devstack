@@ -1,6 +1,42 @@
 version: '3'
 services:
-  devstack:
-    build: .
+  controller:
+    container_name: controller
+    hostname: controller
+    build:
+      context: .
+      dockerfile: controller/Dockerfile
     privileged: true
     tty: true
+    networks:
+      management_network:
+        ipv4_address: 172.28.0.2
+  compute-1:
+    container_name: compute-1
+    hostname: compute-1
+    build:
+      context: .
+      dockerfile: compute/Dockerfile
+    privileged: true
+    tty: true
+    networks:
+      management_network:
+        ipv4_address: 172.28.0.3
+  compute-2:
+    container_name: compute-2
+    hostname: compute-2
+    build:
+      context: .
+      dockerfile: compute/Dockerfile
+    privileged: true
+    tty: true
+    networks:
+      management_network:
+        ipv4_address: 172.28.0.4
+networks:
+  management_network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/24
