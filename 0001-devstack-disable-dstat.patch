@@ -11,6 +11,47 @@ index b292da25..8514dd22 100644
          # service is not started by default
          start_service $MYSQL_SERVICE_NAME
      elif is_ubuntu; then
+diff --git a/lib/dstat b/lib/dstat
+index eb03ae0f..4e2f609e 100644
+--- a/lib/dstat
++++ b/lib/dstat
+@@ -19,33 +19,17 @@ set +o xtrace
+ 
+ # install_dstat() - Install prerequisites for dstat services
+ function install_dstat {
+-    if is_service_enabled memory_tracker; then
+-        # Install python libraries required by tools/mlock_report.py
+-        pip_install_gr psutil
+-    fi
++    true
+ }
+ 
+ # start_dstat() - Start running processes
+ function start_dstat {
+-    # A better kind of sysstat, with the top process per time slice
+-    run_process dstat "$TOP_DIR/tools/dstat.sh $LOGDIR"
+-
+-    # To enable memory_tracker add:
+-    #    enable_service memory_tracker
+-    # to your localrc
+-    run_process memory_tracker "$TOP_DIR/tools/memory_tracker.sh" "" "root"
+-
+-    # TODO(jh): Fail when using the old service name otherwise consumers might
+-    # never notice that is has been removed.
+-    if is_service_enabled peakmem_tracker; then
+-        die $LINENO "The peakmem_tracker service has been removed, use memory_tracker instead"
+-    fi
++    true
+ }
+ 
+ # stop_dstat() stop dstat process
+ function stop_dstat {
+-    stop_process dstat
+-    stop_process memory_tracker
++    true
+ }
+ 
+ # Restore xtrace
 diff --git a/lib/neutron_plugins/ovs_base b/lib/neutron_plugins/ovs_base
 index cc41a8cd..c64861d3 100644
 --- a/lib/neutron_plugins/ovs_base
