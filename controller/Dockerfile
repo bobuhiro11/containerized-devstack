@@ -8,13 +8,14 @@ RUN apt-get update \
   && apt-get install -y --no-install-recommends \
     ca-certificates=20211016~20.04.1 \
     patch=2.7.6-6 \
-    systemd=245.4-4ubuntu3.18 \
+    systemd=245.4-4ubuntu3.19 \
     sudo=1.8.31-1ubuntu1.2 \
     iproute2=5.5.0-1ubuntu1 \
     lsb=11.1.0ubuntu2 \
     git=1:2.25.1-1ubuntu3.6 \
     curl=7.68.0-1ubuntu2.14 \
     init=1.57 \
+    ebtables=2.0.11-3build1 \
   && apt-get -y clean \
   && rm -rf /var/lib/apt/lists/* \
   && curl https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh > /bin/wait-for-it.sh \
@@ -30,9 +31,9 @@ RUN git clone https://github.com/openstack/devstack.git \
 
 COPY controller/local.conf /opt/stack/devstack/
 COPY controller/devstack.service /etc/systemd/system/
-COPY 0001-devstack-disable-ovs.patch /opt/stack/
+COPY 0001-devstack-disable-dstat.patch /opt/stack/
 
-RUN patch -d ./devstack -p1 < 0001-devstack-disable-ovs.patch \
+RUN patch -d ./devstack -p1 < 0001-devstack-disable-dstat.patch \
   && systemctl enable devstack
 
 STOPSIGNAL SIGRTMIN+3
