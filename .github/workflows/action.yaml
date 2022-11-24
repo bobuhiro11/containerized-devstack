@@ -25,4 +25,11 @@ jobs:
       - name: Exec OpenStack CLI
         run: |
           docker-compose logs -t --tail=100
-          docker-compose exec -T --user stack controller /bin/bash -c 'source devstack/openrc admin admin; openstack compute service list'
+          docker-compose exec -T --user stack controller /bin/bash -c \
+            'source devstack/openrc admin admin; openstack compute service list'
+          net_id=$(docker-compose exec -T --user stack controller /bin/bash -c \
+            'source devstack/openrc admin admin >/dev/null 2>&1; openstack network show private -f json 2>/dev/null | jq -r .id' | tr -d "\r\n")
+          docker-compose exec -T --user stack controller /bin/bash -c \
+            "source devstack/openrc admin admin; exec nova boot --image cirros-0.5.2-x86_64-disk --flavor m1.medium --nic net-id=$net_id testvm"
+          docker-compose exec -T --user stack controller /bin/bash -c \
+            "source devstack/openrc admin admin; exec nova list"

@@ -16,6 +16,7 @@ RUN apt-get update \
     curl=7.68.0-1ubuntu2.14 \
     init=1.57 \
     ebtables=2.0.11-3build1 \
+    jq=1.6-1ubuntu0.20.04.1 \
   && apt-get -y clean \
   && rm -rf /var/lib/apt/lists/* \
   && curl https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh > /bin/wait-for-it.sh \
