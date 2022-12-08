@@ -6,17 +6,17 @@ ENV DEVSTACK_COMMIT=a4680766515ed9317b71cfb39cd0d75dc04f3d9c
 
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
-    ca-certificates=20211016~20.04.1 \
-    patch=2.7.6-6 \
-    systemd=245.4-4ubuntu3.19 \
-    sudo=1.8.31-1ubuntu1.2 \
-    iproute2=5.5.0-1ubuntu1 \
-    lsb=11.1.0ubuntu2 \
-    git=1:2.25.1-1ubuntu3.6 \
-    curl=7.68.0-1ubuntu2.14 \
-    init=1.57 \
-    ebtables=2.0.11-3build1 \
-    jq=1.6-1ubuntu0.20.04.1 \
+    ca-certificates \
+    patch \
+    systemd \
+    sudo \
+    iproute2 \
+    lsb \
+    git \
+    curl \
+    init \
+    ebtables \
+    jq \
   && apt-get -y clean \
   && rm -rf /var/lib/apt/lists/* \
   && curl https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh > /bin/wait-for-it.sh \

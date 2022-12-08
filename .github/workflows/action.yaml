@@ -11,9 +11,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: hadolint for controller
-        run: docker run --rm -i hadolint/hadolint < controller/Dockerfile
+        run: docker run -e "HADOLINT_IGNORE=DL3008" --rm -i hadolint/hadolint < controller/Dockerfile
       - name: hadolint for compute
-        run: docker run --rm -i hadolint/hadolint < compute/Dockerfile
+        run: docker run -e "HADOLINT_IGNORE=DL3008" --rm -i hadolint/hadolint < compute/Dockerfile
   test:
     runs-on: ubuntu-20.04
     steps:
