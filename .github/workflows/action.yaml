@@ -36,6 +36,9 @@ jobs:
             "source devstack/openrc admin admin; exec nova list"
           docker-compose exec -T --user stack controller /bin/bash -c \
             "source devstack/openrc admin admin; exec nova list" | grep ACTIVE
+          docker-compose exec -T controller /bin/bash -c "systemctl disable devstack"
+          docker-compose exec -T compute-1  /bin/bash -c "systemctl disable devstack"
+          docker-compose exec -T compute-2  /bin/bash -c "systemctl disable devstack"
           docker-compose stop
           docker ps -a
       - name: Login to Docker Hub
