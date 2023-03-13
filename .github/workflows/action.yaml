@@ -43,8 +43,8 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Push to Docker Hub
-        if: github.event_name != 'schedule'
+      - name: Push to Docker Hub for PR
+        if: github.ref != 'refs/heads/main' && github.event_name != 'schedule'
         run: |
           docker commit controller bobuhiro11/containerized-devstack-controller:${{ github.sha }}
           docker commit compute-1 bobuhiro11/containerized-devstack-compute-1:${{ github.sha }}
