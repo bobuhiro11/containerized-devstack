@@ -3,10 +3,14 @@
 This project easily deploys OpenStack in docker & docker-compose.
 This is mainly for development purpose.
 
+NOTE: This is only tested on x64 Ubuntu 20.04 machine. It may work
+on other Linux Distributions. Other CPU architectures and operating
+systems cannot be supported.
+
 # Usage
 
 `docker-compose` will execute the initialization process of the
-devstack and automatically launch the major OpenStack components. 
+devstack and automatically launch the major OpenStack components.
 This will take about 30 minutes.
 
 ```bash
