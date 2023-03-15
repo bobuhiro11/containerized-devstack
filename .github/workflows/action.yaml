@@ -20,26 +20,26 @@ jobs:
       - uses: actions/checkout@v2
       - name: Init docker-compose
         run: |
-          docker-compose up -d
+          docker-compose --file docker-compose.build.yaml up -d
           sleep 1800
-      - name: Exec OpenStack CLI
+      - name: Build Images
         run: |
-          docker-compose logs -t --tail=100
-          docker-compose exec -T --user stack controller /bin/bash -c \
+          docker-compose --file docker-compose.build.yaml logs -t --tail=100
+          docker-compose --file docker-compose.build.yaml exec -T --user stack controller /bin/bash -c \
             'openstack compute service list'
           net_id=$(docker-compose exec -T --user stack controller /bin/bash -c \
             'openstack network show private -f json 2>/dev/null | jq -r .id' | tr -d "\r\n")
-          docker-compose exec -T --user stack controller /bin/bash -c \
+          docker-compose --file docker-compose.build.yaml exec -T --user stack controller /bin/bash -c \
             "nova boot --image cirros-0.5.2-x86_64-disk --flavor m1.medium --nic net-id=$net_id testvm"
           sleep 10
-          docker-compose exec -T --user stack controller /bin/bash -c \
+          docker-compose --file docker-compose.build.yaml exec -T --user stack controller /bin/bash -c \
             "nova list"
-          docker-compose exec -T --user stack controller /bin/bash -c \
+          docker-compose --file docker-compose.build.yaml exec -T --user stack controller /bin/bash -c \
             "nova list" | grep ACTIVE
-          docker-compose exec -T controller /bin/bash -c "systemctl disable devstack"
-          docker-compose exec -T compute-1  /bin/bash -c "systemctl disable devstack"
-          docker-compose exec -T compute-2  /bin/bash -c "systemctl disable devstack"
-          docker-compose stop
+          for c in controller compute-1 compute-2; do
+            docker-compose --file docker-compose.build.yaml exec -T $c /bin/bash -c "systemctl disable devstack"
+          done
+          docker-compose --file docker-compose.build.yaml stop
           docker ps -a
       - name: Login to Docker Hub
         uses: docker/login-action@v2
@@ -49,18 +49,14 @@ jobs:
       - name: Push to Docker Hub for PR
         if: github.ref != 'refs/heads/main' && github.event_name != 'schedule'
         run: |
-          docker commit controller bobuhiro11/containerized-devstack-controller:${{ github.sha }}
-          docker commit compute-1 bobuhiro11/containerized-devstack-compute-1:${{ github.sha }}
-          docker commit compute-2 bobuhiro11/containerized-devstack-compute-2:${{ github.sha }}
-          docker push bobuhiro11/containerized-devstack-controller:${{ github.sha }}
-          docker push bobuhiro11/containerized-devstack-compute-1:${{ github.sha }}
-          docker push bobuhiro11/containerized-devstack-compute-2:${{ github.sha }}
+          for c in controller compute-1 compute-2; do
+            docker commit $c bobuhiro11/containerized-devstack-$c:${{ github.sha }}
+            docker push bobuhiro11/containerized-devstack-$c:${{ github.sha }}
+          done
       - name: Push to Docker Hub for latest
         if: github.ref == 'refs/heads/main' && github.event_name != 'schedule'
         run: |
-          docker commit controller bobuhiro11/containerized-devstack-controller:latest
-          docker commit compute-1 bobuhiro11/containerized-devstack-compute-1:latest
-          docker commit compute-2 bobuhiro11/containerized-devstack-compute-2:latest
-          docker push bobuhiro11/containerized-devstack-controller:latest
-          docker push bobuhiro11/containerized-devstack-compute-1:latest
-          docker push bobuhiro11/containerized-devstack-compute-2:latest
+          for c in controller compute-1 compute-2; do
+            docker commit $c bobuhiro11/containerized-devstack-$c:latest
+            docker push bobuhiro11/containerized-devstack-$c:latest
+          done
