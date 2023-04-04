@@ -26,16 +26,16 @@ jobs:
         run: |
           docker-compose logs -t --tail=100
           docker-compose exec -T --user stack controller /bin/bash -c \
-            'source devstack/openrc admin admin; openstack compute service list'
+            'openstack compute service list'
           net_id=$(docker-compose exec -T --user stack controller /bin/bash -c \
-            'source devstack/openrc admin admin >/dev/null 2>&1; openstack network show private -f json 2>/dev/null | jq -r .id' | tr -d "\r\n")
+            'openstack network show private -f json 2>/dev/null | jq -r .id' | tr -d "\r\n")
           docker-compose exec -T --user stack controller /bin/bash -c \
-            "source devstack/openrc admin admin; exec nova boot --image cirros-0.5.2-x86_64-disk --flavor m1.medium --nic net-id=$net_id testvm"
+            "nova boot --image cirros-0.5.2-x86_64-disk --flavor m1.medium --nic net-id=$net_id testvm"
           sleep 10
           docker-compose exec -T --user stack controller /bin/bash -c \
-            "source devstack/openrc admin admin; exec nova list"
+            "nova list"
           docker-compose exec -T --user stack controller /bin/bash -c \
-            "source devstack/openrc admin admin; exec nova list" | grep ACTIVE
+            "nova list" | grep ACTIVE
           docker-compose exec -T controller /bin/bash -c "systemctl disable devstack"
           docker-compose exec -T compute-1  /bin/bash -c "systemctl disable devstack"
           docker-compose exec -T compute-2  /bin/bash -c "systemctl disable devstack"

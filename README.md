@@ -34,8 +34,7 @@ sudo docker-compose logs -f
 You can use the OpenStack CLI in the container.
 
 ```bash
-sudo docker-compose exec --user stack controller /bin/bash -c \
-  'source devstack/openrc admin admin; exec openstack image list'
+sudo docker-compose exec --user stack controller /bin/bash -c 'openstack image list'
 # +--------------------------------------+--------------------------+--------+
 # | ID                                   | Name                     | Status |
 # +--------------------------------------+--------------------------+--------+
