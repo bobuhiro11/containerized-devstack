@@ -38,6 +38,20 @@ jobs:
             "nova list" | grep ACTIVE
           for c in controller compute-1 compute-2; do
             docker-compose --file docker-compose.build.yaml exec -T $c /bin/bash -c "systemctl disable devstack"
+            # Disable loading kmod for openvswitch on "ovs-ctl start"
+            docker-compose --file docker-compose.build.yaml exec -T $c /bin/bash -c "sed -i -e 's/insert_mod_if_required.*return 1/#&/' /usr/share/openvswitch/scripts/ovs-ctl"
+
+            # Add auth info for nova-compute
+            # https://bugs.launchpad.net/devstack/+bug/1996465
+            docker-compose --file docker-compose.build.yaml exec -T $c /bin/bash -c "echo '[placement]' >> /etc/nova/nova-cpu.conf"
+            docker-compose --file docker-compose.build.yaml exec -T $c /bin/bash -c "echo 'region_name = RegionOne' >> /etc/nova/nova-cpu.conf"
+            docker-compose --file docker-compose.build.yaml exec -T $c /bin/bash -c "echo 'project_domain_name = Default' >> /etc/nova/nova-cpu.conf"
+            docker-compose --file docker-compose.build.yaml exec -T $c /bin/bash -c "echo 'project_name = service' >> /etc/nova/nova-cpu.conf"
+            docker-compose --file docker-compose.build.yaml exec -T $c /bin/bash -c "echo 'user_domain_name = Default' >> /etc/nova/nova-cpu.conf"
+            docker-compose --file docker-compose.build.yaml exec -T $c /bin/bash -c "echo 'password = password' >> /etc/nova/nova-cpu.conf"
+            docker-compose --file docker-compose.build.yaml exec -T $c /bin/bash -c "echo 'username = placement' >> /etc/nova/nova-cpu.conf"
+            docker-compose --file docker-compose.build.yaml exec -T $c /bin/bash -c "echo 'auth_url = http://172.28.0.2/identity' >> /etc/nova/nova-cpu.conf"
+            docker-compose --file docker-compose.build.yaml exec -T $c /bin/bash -c "echo 'auth_type = password' >> /etc/nova/nova-cpu.conf"
           done
           docker-compose --file docker-compose.build.yaml stop
           docker ps -a
