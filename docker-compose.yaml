@@ -3,13 +3,45 @@ services:
   controller:
     container_name: controller
     hostname: controller
-    build:
-      context: .
-      dockerfile: controller/Dockerfile
-    privileged: true
+    image: bobuhiro11/containerized-devstack-controller
     tty: true
+    cap_add:
+      - CHOWN
+      - DAC_OVERRIDE
+      - DAC_READ_SEARCH
+      - FOWNER
+      - FSETID
+      - IPC_LOCK
+      - IPC_OWNER
+      - KILL
+      - LEASE
+      - LINUX_IMMUTABLE
+      - MAC_ADMIN
+      - MAC_OVERRIDE
+      - MKNOD
+      - NET_ADMIN
+      - NET_BIND_SERVICE
+      - NET_BROADCAST
+      - NET_RAW
+      - SETFCAP
+      - SETGID
+      - SETPCAP
+      - SETUID
+      - SYS_ADMIN
+      - SYS_CHROOT
+      - SYS_NICE
+      - SYS_PACCT
+      - SYS_PTRACE
+      - SYS_RAWIO
+      - SYS_RESOURCE
+    tmpfs:
+      - /tmp
+      - /run
+      - /run/lock
     volumes:
-      - '/lib/modules:/lib/modules'
+      - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
+    devices:
+      - '/dev/net/tun:/dev/net/tun'
     sysctls:
       net.ipv6.conf.all.disable_ipv6: 0
       net.ipv6.conf.default.disable_ipv6: 0
@@ -21,13 +53,45 @@ services:
   compute-1:
     container_name: compute-1
     hostname: compute-1
-    build:
-      context: .
-      dockerfile: compute/Dockerfile
-    privileged: true
+    image: bobuhiro11/containerized-devstack-compute-1
     tty: true
+    cap_add:
+      - CHOWN
+      - DAC_OVERRIDE
+      - DAC_READ_SEARCH
+      - FOWNER
+      - FSETID
+      - IPC_LOCK
+      - IPC_OWNER
+      - KILL
+      - LEASE
+      - LINUX_IMMUTABLE
+      - MAC_ADMIN
+      - MAC_OVERRIDE
+      - MKNOD
+      - NET_ADMIN
+      - NET_BIND_SERVICE
+      - NET_BROADCAST
+      - NET_RAW
+      - SETFCAP
+      - SETGID
+      - SETPCAP
+      - SETUID
+      - SYS_ADMIN
+      - SYS_CHROOT
+      - SYS_NICE
+      - SYS_PACCT
+      - SYS_PTRACE
+      - SYS_RAWIO
+      - SYS_RESOURCE
+    tmpfs:
+      - /tmp
+      - /run
+      - /run/lock
     volumes:
-      - '/lib/modules:/lib/modules'
+      - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
+    devices:
+      - '/dev/net/tun:/dev/net/tun'
     sysctls:
       net.ipv6.conf.all.disable_ipv6: 0
       net.ipv6.conf.default.disable_ipv6: 0
@@ -39,13 +103,45 @@ services:
   compute-2:
     container_name: compute-2
     hostname: compute-2
-    build:
-      context: .
-      dockerfile: compute/Dockerfile
-    privileged: true
+    image: bobuhiro11/containerized-devstack-compute-2
     tty: true
+    cap_add:
+      - CHOWN
+      - DAC_OVERRIDE
+      - DAC_READ_SEARCH
+      - FOWNER
+      - FSETID
+      - IPC_LOCK
+      - IPC_OWNER
+      - KILL
+      - LEASE
+      - LINUX_IMMUTABLE
+      - MAC_ADMIN
+      - MAC_OVERRIDE
+      - MKNOD
+      - NET_ADMIN
+      - NET_BIND_SERVICE
+      - NET_BROADCAST
+      - NET_RAW
+      - SETFCAP
+      - SETGID
+      - SETPCAP
+      - SETUID
+      - SYS_ADMIN
+      - SYS_CHROOT
+      - SYS_NICE
+      - SYS_PACCT
+      - SYS_PTRACE
+      - SYS_RAWIO
+      - SYS_RESOURCE
+    tmpfs:
+      - /tmp
+      - /run
+      - /run/lock
     volumes:
-      - '/lib/modules:/lib/modules'
+      - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
+    devices:
+      - '/dev/net/tun:/dev/net/tun'
     sysctls:
       net.ipv6.conf.all.disable_ipv6: 0
       net.ipv6.conf.default.disable_ipv6: 0
