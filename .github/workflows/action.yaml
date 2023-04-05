@@ -25,40 +25,11 @@ jobs:
       - name: Build Images
         run: |
           docker-compose --file docker-compose.build.yaml logs -t --tail=100
-          docker-compose --file docker-compose.build.yaml exec -T --user stack controller /bin/bash -c \
-            'openstack compute service list'
-          net_id=$(docker-compose exec -T --user stack controller /bin/bash -c \
-            'openstack network show private -f json 2>/dev/null | jq -r .id' | tr -d "\r\n")
-          docker-compose --file docker-compose.build.yaml exec -T --user stack controller /bin/bash -c \
-            "nova boot --image cirros-0.5.2-x86_64-disk --flavor m1.medium --nic net-id=$net_id testvm"
-          sleep 10
-          docker-compose --file docker-compose.build.yaml exec -T --user stack controller /bin/bash -c \
-            "nova list"
-          docker-compose --file docker-compose.build.yaml exec -T --user stack controller /bin/bash -c \
-            "nova list" | grep ACTIVE
+          docker-compose --file docker-compose.build.yaml exec -T --user stack controller /bin/test.bash
           for c in controller compute-1 compute-2; do
-            docker-compose --file docker-compose.build.yaml exec -T $c /bin/bash -c "systemctl disable devstack"
-            # Disable loading kmod for openvswitch on "ovs-ctl start"
-            docker-compose --file docker-compose.build.yaml exec -T $c /bin/bash -c "sed -i -e 's/insert_mod_if_required.*return 1/#&/' /usr/share/openvswitch/scripts/ovs-ctl"
-
-            # Add auth info for nova-compute
-            # https://bugs.launchpad.net/devstack/+bug/1996465
-            docker-compose --file docker-compose.build.yaml exec -T $c /bin/bash -c "echo '[placement]' >> /etc/nova/nova-cpu.conf"
-            docker-compose --file docker-compose.build.yaml exec -T $c /bin/bash -c "echo 'region_name = RegionOne' >> /etc/nova/nova-cpu.conf"
-            docker-compose --file docker-compose.build.yaml exec -T $c /bin/bash -c "echo 'project_domain_name = Default' >> /etc/nova/nova-cpu.conf"
-            docker-compose --file docker-compose.build.yaml exec -T $c /bin/bash -c "echo 'project_name = service' >> /etc/nova/nova-cpu.conf"
-            docker-compose --file docker-compose.build.yaml exec -T $c /bin/bash -c "echo 'user_domain_name = Default' >> /etc/nova/nova-cpu.conf"
-            docker-compose --file docker-compose.build.yaml exec -T $c /bin/bash -c "echo 'password = password' >> /etc/nova/nova-cpu.conf"
-            docker-compose --file docker-compose.build.yaml exec -T $c /bin/bash -c "echo 'username = placement' >> /etc/nova/nova-cpu.conf"
-            docker-compose --file docker-compose.build.yaml exec -T $c /bin/bash -c "echo 'auth_url = http://172.28.0.2/identity' >> /etc/nova/nova-cpu.conf"
-            docker-compose --file docker-compose.build.yaml exec -T $c /bin/bash -c "echo 'auth_type = password' >> /etc/nova/nova-cpu.conf"
-
-            # Disable namespace in libvirt/qemu.conf
-            # https://listman.redhat.com/archives/libvirt-users/2017-February/009734.html
-            docker-compose --file docker-compose.build.yaml exec -T $c /bin/bash -c "echo 'namespaces = []' >> /etc/libvirt/qemu.conf"
+            docker-compose --file docker-compose.build.yaml exec -T $c /bin/bash -c /bin/pre-commit.bash
           done
           docker-compose --file docker-compose.build.yaml stop
-          docker ps -a
       - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
