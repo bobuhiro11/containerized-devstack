@@ -64,17 +64,12 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Push to Docker Hub for PR
-        if: github.ref != 'refs/heads/main' && github.event_name != 'schedule'
+      - name: Push to Docker Hub
+        if: github.event_name != 'schedule'
+        env:
+          tag: "${{ github.ref == 'refs/heads/main' && 'latest' || github.sha }}"
         run: |
           for c in controller compute-1 compute-2; do
-            docker commit $c bobuhiro11/containerized-devstack-$c:${{ github.sha }}
-            docker push bobuhiro11/containerized-devstack-$c:${{ github.sha }}
-          done
-      - name: Push to Docker Hub for latest
-        if: github.ref == 'refs/heads/main' && github.event_name != 'schedule'
-        run: |
-          for c in controller compute-1 compute-2; do
-            docker commit $c bobuhiro11/containerized-devstack-$c:latest
-            docker push bobuhiro11/containerized-devstack-$c:latest
+            docker commit $c bobuhiro11/containerized-devstack-$c:$tag
+            docker push bobuhiro11/containerized-devstack-$c:$tag
           done
