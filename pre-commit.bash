@@ -1,6 +1,6 @@
 #!/bin/bash -xe
 
-systemctl disable devstack
+systemctl disable devstack.service
 
 # Disable loading kmod for openvswitch on "ovs-ctl start"
 sed -i -e 's/insert_mod_if_required.*return 1/#&/' /usr/share/openvswitch/scripts/ovs-ctl

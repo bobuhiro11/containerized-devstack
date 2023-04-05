@@ -18,12 +18,10 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - name: Init docker-compose
+      - name: Build Images
         run: |
           docker-compose --file docker-compose.build.yaml up -d
           sleep 1800
-      - name: Build Images
-        run: |
           docker-compose --file docker-compose.build.yaml logs -t --tail=100
           docker-compose --file docker-compose.build.yaml exec -T --user stack controller /bin/test.bash
           for c in controller compute-1 compute-2; do
@@ -44,3 +42,12 @@ jobs:
             docker commit $c bobuhiro11/containerized-devstack-$c:$tag
             docker push bobuhiro11/containerized-devstack-$c:$tag
           done
+      - name: Test Images
+        if: github.event_name != 'schedule'
+        env:
+          tag: "${{ github.ref == 'refs/heads/main' && 'latest' || github.sha }}"
+        run: |
+          sed -i -e "s/image:.*/&:$tag/g" docker-compose.yaml
+          docker-compose up -d
+          sleep 180
+          docker-compose exec -T --user stack controller /bin/test.bash
