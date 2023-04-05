@@ -45,6 +45,8 @@ RUN git clone https://github.com/openstack/devstack.git \
 
 COPY compute/local.conf /opt/stack/devstack/
 COPY compute/devstack.service /etc/systemd/system/
+COPY test.bash /bin/
+COPY pre-commit.bash /bin/
 
 RUN systemctl enable devstack
 
