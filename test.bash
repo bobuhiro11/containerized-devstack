@@ -6,3 +6,4 @@ nova boot --image cirros-0.5.2-x86_64-disk --flavor m1.medium --nic net-id=$net_
 sleep 10
 nova list
 nova list | grep ACTIVE
+nova delete testvm
