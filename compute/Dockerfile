@@ -47,6 +47,7 @@ COPY compute/local.conf /opt/stack/devstack/
 COPY compute/devstack.service /etc/systemd/system/
 COPY test.bash /bin/
 COPY pre-commit.bash /bin/
+COPY nova-discover-hosts.service /etc/systemd/system/
 
 RUN systemctl enable devstack
 

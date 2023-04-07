@@ -1,0 +1,20 @@
+[Unit]
+Description=
+Documentation=
+Wants=
+Before=
+After=devstack@n-cpu.service rabbitmq-server.service mysql.service
+DefaultDependencies=
+Conflicts=
+Before=
+ConditionVirtualization=
+
+[Service]
+Type=oneshot
+PIDFile=
+User=stack
+Group=stack
+ExecStart=/usr/local/bin/nova-manage cell_v2 discover_hosts --verbose
+
+[Install]
+WantedBy=

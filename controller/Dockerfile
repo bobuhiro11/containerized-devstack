@@ -46,6 +46,7 @@ RUN git clone https://github.com/openstack/devstack.git \
 COPY controller/local.conf /opt/stack/devstack/
 COPY controller/devstack.service /etc/systemd/system/
 COPY iscsid.service /etc/systemd/system/
+COPY nova-discover-hosts.service /etc/systemd/system/
 COPY test.bash /bin/
 COPY pre-commit.bash /bin/
 
