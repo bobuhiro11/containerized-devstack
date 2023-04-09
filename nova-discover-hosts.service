@@ -14,6 +14,7 @@ Type=oneshot
 PIDFile=
 User=stack
 Group=stack
+ExecStartPre=/bin/sleep 30
 ExecStart=/usr/local/bin/nova-manage cell_v2 discover_hosts --verbose
 
 [Install]

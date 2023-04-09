@@ -12,3 +12,4 @@ nova delete testvm
 
 sudo journalctl --no-pager -n 300 -eu devstack@n-cpu
 sudo journalctl --no-pager -n 300 -eu devstack@q-agt
+sudo journalctl --no-pager -n 300 -eu nova-discover-hosts.service
