@@ -1,5 +1,6 @@
 #!/bin/bash -xe
 
+nova-manage cell_v2 discover_hosts --verbose
 openstack compute service list
 openstack network agent list
 net_id=$(openstack network show private -f json 2>/dev/null | jq -r .id | tr -d "\r\n")
