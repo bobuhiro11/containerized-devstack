@@ -30,6 +30,7 @@ RUN apt-get update \
     init \
     ebtables \
     jq \
+    iputils-ping \
   && apt-get -y clean \
   && rm -rf /var/lib/apt/lists/* \
   && curl https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh > /bin/wait-for-it.sh \
