@@ -5,6 +5,9 @@ services:
     hostname: controller
     image: bobuhiro11/containerized-devstack-controller
     tty: true
+    security_opt:
+      - seccomp:unconfined
+      - apparmor:unconfined
     cap_add:
       - CHOWN
       - DAC_OVERRIDE
@@ -55,6 +58,9 @@ services:
     hostname: compute-1
     image: bobuhiro11/containerized-devstack-compute-1
     tty: true
+    security_opt:
+      - seccomp:unconfined
+      - apparmor:unconfined
     cap_add:
       - CHOWN
       - DAC_OVERRIDE
@@ -105,6 +111,9 @@ services:
     hostname: compute-2
     image: bobuhiro11/containerized-devstack-compute-2
     tty: true
+    security_opt:
+      - seccomp:unconfined
+      - apparmor:unconfined
     cap_add:
       - CHOWN
       - DAC_OVERRIDE
