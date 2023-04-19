@@ -5,6 +5,7 @@ Description=devstack
 User=stack
 Type=oneshot
 ExecStartPre=/bin/wait-for-it.sh -h 172.28.0.2 -p 80 -t 3600
+ExecStartPre=/usr/bin/sudo /usr/bin/ovs-vsctl set-manager ptcp:6640
 ExecStart=/opt/stack/devstack/stack.sh
 ExecReload = /usr/bin/kill -HUP $MAINPID
 KillMode = process

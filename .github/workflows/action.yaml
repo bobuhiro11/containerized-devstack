@@ -7,7 +7,7 @@ on:
   pull_request:
 jobs:
   lint:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
       - name: hadolint for controller
@@ -15,9 +15,15 @@ jobs:
       - name: hadolint for compute
         run: docker run -e "HADOLINT_IGNORE=DL3008" --rm -i hadolint/hadolint < compute/Dockerfile
   test:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
+      - name: Install docker-compose
+        uses: ndeloof/install-compose-action@v0.0.1
+        with:
+          version: v2.17.3
+          legacy: true
+      - run: docker-compose --version
       - name: Build Images
         run: |
           docker-compose --file docker-compose.build.yaml up -d
