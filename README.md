@@ -3,7 +3,7 @@
 This project easily deploys OpenStack in docker & docker-compose.
 This is mainly for development purpose.
 
-NOTE: This is only tested on **x64 Ubuntu 20.04 machine**. It may work
+NOTE: This is only tested on **x64 Ubuntu 22.04 machine**. It may work
 on other Linux Distributions. Other CPU architectures and operating
 systems cannot be supported.
 
