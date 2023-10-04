@@ -10,7 +10,9 @@ openstack compute service list
 openstack network agent list
 
 net_id=$(openstack network show private -f json 2>/dev/null | jq -r .id | tr -d "\r\n")
-nova boot --image cirros-0.5.2-x86_64-disk --flavor m1.medium \
+image=$(openstack image list | awk '/cirros/ { print $4 }')
+
+nova boot --image $image --flavor m1.medium \
   --nic net-id=$net_id --availability-zone=nova:controller testvm
 sleep 60
 
