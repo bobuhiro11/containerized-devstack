@@ -16,11 +16,12 @@ nova boot --image $image --flavor m1.medium \
   --nic net-id=$net_id --availability-zone=nova:controller testvm
 sleep 60
 
+ip=$(openstack server show testvm -f json | jq -r '.addresses.private[0]')
+
 nova list
 nova show testvm | grep ACTIVE
 nova console-log testvm
-nova console-log testvm | grep "udhcpc: lease of"
-nova console-log testvm | grep "successful after"
+nova console-log testvm | grep $ip
 nova delete testvm
 
 sudo journalctl --no-pager -n 300 -eu devstack@n-cpu
