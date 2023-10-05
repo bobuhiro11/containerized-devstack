@@ -24,6 +24,7 @@ jobs:
           version: v2.17.3
           legacy: true
       - run: docker-compose --version
+      - run: docker image prune --force
       - name: Build Images
         run: |
           docker-compose --file docker-compose.build.yaml up -d
