@@ -35,7 +35,7 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/* \
   && curl https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh > /bin/wait-for-it.sh \
   && chmod a+x /bin/wait-for-it.sh \
-  && useradd -s /bin/bash -d /opt/stack -m stack \
+  && useradd -l -s /bin/bash -d /opt/stack -m stack \
   && mkdir -p /etc/sudoers.d/ \
   && echo "stack ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/stack \
   # https://review.opendev.org/c/openstack/devstack/+/838645 \
