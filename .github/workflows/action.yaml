@@ -17,6 +17,7 @@ jobs:
   test:
     runs-on: ubuntu-22.04
     steps:
+      - uses: easimon/maximize-build-space@master
       - uses: actions/checkout@v2
       - name: Install docker-compose
         uses: ndeloof/install-compose-action@v0.0.1
