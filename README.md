@@ -7,6 +7,32 @@ NOTE: This is only tested on **x64 Ubuntu 22.04 machine**. It may work
 on other Linux Distributions. Other CPU architectures and operating
 systems cannot be supported.
 
+<details>
+<summary>Ubuntu 24.04 Support</summary>
+
+This project has also been tested on Ubuntu 24.04 with Docker Compose V2. 
+
+### Installing Docker Compose V2 on Ubuntu 24.04
+
+```bash
+# Install Docker Compose V2
+sudo apt-get update && sudo apt-get install -y docker-compose-v2
+
+# Verify installation
+docker compose version
+```
+
+### Using with Ubuntu 24.04
+
+The docker-compose.yaml file in this repository supports both Ubuntu 22.04 and Ubuntu 24.04. When using Ubuntu 24.04, make sure to use the Docker Compose V2 command:
+
+```bash
+sudo docker compose up
+```
+
+Note the difference in command syntax: `docker compose` (V2) vs `docker-compose` (V1).
+</details>
+
 # Usage
 
 The docker-compose command launches an OpenStack environment based
