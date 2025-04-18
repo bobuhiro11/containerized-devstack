@@ -1,8 +1,8 @@
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
 EXPOSE 80 5000 8773 8774 8775 8776 9292
 ENV DEBIAN_FRONTEND=noninteractive
-ENV DEVSTACK_COMMIT=ad029c0e8b66d81889c80d4a68b4654dd169fecf
+ENV DEVSTACK_COMMIT=608ae718fca61e557b315f87900a54a7fb40b07e
 
 ENV OS_REGION_NAME=RegionOne
 ENV OS_PROJECT_DOMAIN_ID=default
@@ -24,7 +24,7 @@ RUN apt-get update \
     systemd \
     sudo \
     iproute2 \
-    lsb \
+    lsb-release \
     git \
     curl \
     init \
