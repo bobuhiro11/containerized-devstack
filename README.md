@@ -1,41 +1,15 @@
 # containerized-devstack
 
-This project easily deploys OpenStack in docker & docker-compose.
+This project easily deploys OpenStack in docker & docker compose.
 This is mainly for development purpose.
 
-NOTE: This is only tested on **x64 Ubuntu 22.04 machine**. It may work
+NOTE: This is only tested on **x64 Ubuntu 24.04 machine**. It may work
 on other Linux Distributions. Other CPU architectures and operating
 systems cannot be supported.
 
-<details>
-<summary>Ubuntu 24.04 Support</summary>
-
-This project has also been tested on Ubuntu 24.04 with Docker Compose V2. 
-
-### Installing Docker Compose V2 on Ubuntu 24.04
-
-```bash
-# Install Docker Compose V2
-sudo apt-get update && sudo apt-get install -y docker-compose-v2
-
-# Verify installation
-docker compose version
-```
-
-### Using with Ubuntu 24.04
-
-The docker-compose.yaml file in this repository supports both Ubuntu 22.04 and Ubuntu 24.04. When using Ubuntu 24.04, make sure to use the Docker Compose V2 command:
-
-```bash
-sudo docker compose up
-```
-
-Note the difference in command syntax: `docker compose` (V2) vs `docker-compose` (V1).
-</details>
-
 # Usage
 
-The docker-compose command launches an OpenStack environment based
+The docker compose command launches an OpenStack environment based
 on preconfigured container images. The images are huge and will take
 some time to download, but once complete, you should be up and running
 in less than a minute thereafter.
@@ -44,13 +18,13 @@ An example is shown below:
 
 ```bash
 curl -sLO https://raw.githubusercontent.com/bobuhiro11/containerized-devstack/main/docker-compose.yaml
-sudo docker-compose up
+sudo docker compose up
 ```
 
 You can use the OpenStack CLI in the container.
 
 ```bash
-sudo docker-compose exec controller openstack compute service list
+sudo docker compose exec controller openstack compute service list
 # +--------------------------------------+----------------+------------+----------+---------+-------+----------------------------+
 # | ID                                   | Binary         | Host       | Zone     | Status  | State | Updated At                 |
 # +--------------------------------------+----------------+------------+----------+---------+-------+----------------------------+
@@ -62,7 +36,7 @@ sudo docker-compose exec controller openstack compute service list
 # | 3a3ec69d-f2d3-477a-b0b5-14b9924e1b5b | nova-compute   | compute-1  | nova     | enabled | up    | 2023-04-19T03:18:55.000000 |
 # +--------------------------------------+----------------+------------+----------+---------+-------+----------------------------+
 
-sudo docker-compose exec controller openstack network agent list
+sudo docker compose exec controller openstack network agent list
 # +--------------------------------------+--------------------+------------+-------------------+-------+-------+---------------------------+
 # | ID                                   | Agent Type         | Host       | Availability Zone | Alive | State | Binary                    |
 # +--------------------------------------+--------------------+------------+-------------------+-------+-------+---------------------------+
@@ -78,9 +52,9 @@ The image contains a script `/bin/test.bash` to check some operations.
 This confirms that the VM is booted.
 
 ```bash
-sudo docker-compose exec controller /bin/test.bash
-# + nova boot --image cirros-0.5.2-x86_64-disk --flavor m1.medium ...
-# + nova list
+sudo docker compose exec controller /bin/test.bash
+# + openstack server create --image cirros-0.5.2-x86_64-disk --flavor m1.medium ...
+# + openstack server list
 # +--------------------------------------+--------+--------+------------+-------------+-------------------+
 # | ID                                   | Name   | Status | Task State | Power State | Networks          |
 # +--------------------------------------+--------+--------+------------+-------------+-------------------+
