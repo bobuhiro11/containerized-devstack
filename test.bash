@@ -12,17 +12,15 @@ openstack network agent list
 net_id=$(openstack network show private -f json 2>/dev/null | jq -r .id | tr -d "\r\n")
 image=$(openstack image list | awk '/cirros/ { print $4 }')
 
-nova boot --image $image --flavor m1.medium \
+openstack server create --image $image --flavor m1.medium \
   --nic net-id=$net_id --availability-zone=nova:controller testvm
 sleep 60
 
 ip=$(openstack server show testvm -f json | jq -r '.addresses.private[0]')
 
-nova list
-nova show testvm | grep ACTIVE
-nova console-log testvm
-nova console-log testvm | grep $ip
-nova delete testvm
+openstack server list
+openstack server show testvm | grep ACTIVE
+openstack server delete testvm
 
 sudo journalctl --no-pager -n 300 -eu devstack@n-cpu
 sudo journalctl --no-pager -n 300 -eu devstack@q-agt

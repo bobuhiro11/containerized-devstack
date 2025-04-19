@@ -7,7 +7,7 @@ on:
   pull_request:
 jobs:
   lint:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v2
       - name: hadolint for controller
@@ -15,7 +15,7 @@ jobs:
       - name: hadolint for compute
         run: docker run -e "HADOLINT_IGNORE=DL3008" --rm -i hadolint/hadolint < compute/Dockerfile
   test:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Remove unused files
         run: |
@@ -29,17 +29,17 @@ jobs:
         with:
           version: v2.17.3
           legacy: true
-      - run: docker-compose --version
+      - run: docker compose version
       - name: Build Images
         run: |
-          docker-compose --file docker-compose.build.yaml up -d
+          docker compose --file docker-compose.build.yaml up -d
           sleep 1800
-          docker-compose --file docker-compose.build.yaml logs -t --tail=100
-          docker-compose --file docker-compose.build.yaml exec -T --user stack controller /bin/test.bash
+          docker compose --file docker-compose.build.yaml logs -t --tail=100
+          docker compose --file docker-compose.build.yaml exec -T --user stack controller /bin/test.bash
           for c in controller compute-1 compute-2; do
-            docker-compose --file docker-compose.build.yaml exec -T $c /bin/bash -c /bin/pre-commit.bash
+            docker compose --file docker-compose.build.yaml exec -T $c /bin/bash -c /bin/pre-commit.bash
           done
-          docker-compose --file docker-compose.build.yaml stop
+          docker compose --file docker-compose.build.yaml stop
       - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
@@ -60,6 +60,6 @@ jobs:
           tag: "${{ github.ref == 'refs/heads/main' && 'latest' || github.sha }}"
         run: |
           sed -i -e "s/image:.*/&:$tag/g" docker-compose.yaml
-          docker-compose up -d
+          docker compose up -d
           sleep 180
-          docker-compose exec -T --user stack controller /bin/test.bash
+          docker compose exec -T --user stack controller /bin/test.bash
