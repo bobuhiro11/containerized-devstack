@@ -18,7 +18,7 @@ An example is shown below:
 
 ```bash
 curl -sLO https://raw.githubusercontent.com/bobuhiro11/containerized-devstack/main/docker-compose.yaml
-sudo docker-compose up
+sudo docker compose up
 ```
 
 You can use the OpenStack CLI in the container.
