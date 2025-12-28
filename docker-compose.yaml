@@ -6,7 +6,6 @@ services:
     image: bobuhiro11/containerized-devstack-controller
     privileged: true
     tty: true
-    cgroup: host
     volumes:
       - '/sys/fs/cgroup:/sys/fs/cgroup:rw'
     devices:
@@ -25,7 +24,6 @@ services:
     image: bobuhiro11/containerized-devstack-compute-1
     privileged: true
     tty: true
-    cgroup: host
     volumes:
       - '/sys/fs/cgroup:/sys/fs/cgroup:rw'
     devices:
@@ -44,7 +42,6 @@ services:
     image: bobuhiro11/containerized-devstack-compute-2
     privileged: true
     tty: true
-    cgroup: host
     volumes:
       - '/sys/fs/cgroup:/sys/fs/cgroup:rw'
     devices:
